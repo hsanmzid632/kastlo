@@ -13,4 +13,4 @@ np.save(os.path.join(backend_dir, "embeddings.npy"), embeddings)
 np.save(os.path.join(backend_dir, "paths.npy"), paths)
 faiss.write_index(index, os.path.join(backend_dir, "faiss.index"))
 
-print(f"✅ Fichiers enregistrés dans {backend_dir}")
+print(f"ok Fichiers enregistrés dans {backend_dir}")

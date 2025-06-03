@@ -14,4 +14,4 @@ for f in os.listdir(image_dir):
         valid_paths.append(os.path.join(image_dir, f))
 
 np.save(os.path.join(output_dir, "paths.npy"), valid_paths)
-print(f"✅ {len(valid_paths)} images valides sauvegardées dans outputs/paths.npy")
+print(f"OK {len(valid_paths)} images valides sauvegardees dans outputs/paths.npy")

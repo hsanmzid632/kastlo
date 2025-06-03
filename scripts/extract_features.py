@@ -20,4 +20,4 @@ for path in tqdm(paths):
 
 embeddings = np.vstack(embeddings).astype("float32")
 np.save("outputs/embeddings.npy", embeddings)
-print("✅ Embeddings sauvegardés dans outputs/embeddings.npy")
+print("ok Embeddings sauvegardés dans outputs/embeddings.npy")
