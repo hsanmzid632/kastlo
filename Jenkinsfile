@@ -21,9 +21,7 @@ pipeline {
 
         stage('Créer index FAISS') {
             steps {
-                dir('pipeline') {
-                    bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\build_index.py'
-                }
+                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\build_index.py'
             }
         }
     }
