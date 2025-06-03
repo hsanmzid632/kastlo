@@ -4,7 +4,7 @@ pipeline {
         stage('Install requirements') {
             steps {
                 dir('pipeline') {
-                    bat 'pip install -r requirements.txt'
+                    bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pip install -r requirements.txt'
                 }
             }
         }
@@ -12,7 +12,7 @@ pipeline {
         stage('Charger images') {
             steps {
                 dir('pipeline') {
-                    bat 'python scripts\\load_images.py'
+                    bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\load_images.py'
                 }
             }
         }
@@ -20,7 +20,7 @@ pipeline {
         stage('Extraire features') {
             steps {
                 dir('pipeline') {
-                    bat 'python scripts\\extract_features.py'
+                    bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\extract_features.py'
                 }
             }
         }
@@ -28,7 +28,7 @@ pipeline {
         stage('Créer index FAISS') {
             steps {
                 dir('pipeline') {
-                    bat 'python scripts\\build_index.py'
+                    bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\build_index.py'
                 }
             }
         }
@@ -36,7 +36,7 @@ pipeline {
         stage('Sauvegarder dans backend') {
             steps {
                 dir('pipeline') {
-                    bat 'python scripts\\save_outputs.py'
+                    bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\save_outputs.py'
                 }
             }
         }
