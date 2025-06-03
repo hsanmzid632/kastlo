@@ -63,7 +63,7 @@ def preprocess_shape(image):
 
 def extract_embedding_with_fclip(image_array):
     image_pil = Image.fromarray(image_array)
-    return fclip.encode_images([image_pil])[0]
+    return fclip.encode_images([image_pil], batch_size=1)[0]
 
 
 @torch.no_grad()
