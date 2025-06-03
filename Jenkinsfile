@@ -26,13 +26,5 @@ pipeline {
                 }
             }
         }
-
-        stage('Sauvegarder dans backend') {
-            steps {
-                dir('pipeline') {
-                    bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\save_outputs.py'
-                }
-            }
-        }
     }
 }

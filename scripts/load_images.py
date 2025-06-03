@@ -1,7 +1,8 @@
 import os
 import numpy as np
 
-image_dir = os.path.join("..", "data", "images")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+image_dir = os.path.join(BASE_DIR, "data", "images")
 output_dir = "outputs"
 os.makedirs(output_dir, exist_ok=True)
 
