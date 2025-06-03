@@ -1,8 +1,11 @@
+import sys
 import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from utils import load_image, extract_combined_features
+
 import numpy as np
 import torch
 from tqdm import tqdm
-from scripts.utils import load_image, extract_combined_features
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
