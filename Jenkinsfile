@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+    stages {
+        stage('Install requirements') {
+            steps {
+                dir('pipeline') {
+                    bat 'pip install -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Charger images') {
+            steps {
+                dir('pipeline') {
+                    bat 'python scripts\\load_images.py'
+                }
+            }
+        }
+
+        stage('Extraire features') {
+            steps {
+                dir('pipeline') {
+                    bat 'python scripts\\extract_features.py'
+                }
+            }
+        }
+
+        stage('Créer index FAISS') {
+            steps {
+                dir('pipeline') {
+                    bat 'python scripts\\build_index.py'
+                }
+            }
+        }
+
+        stage('Sauvegarder dans backend') {
+            steps {
+                dir('pipeline') {
+                    bat 'python scripts\\save_outputs.py'
+                }
+            }
+        }
+    }
+}
