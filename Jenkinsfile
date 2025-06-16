@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+
+    triggers {
+        cron('0 2 * * 1')
+    }
+
+    stages {
+        stage('Install requirements') {
+            steps {
+                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pip install -r requirements.txt'
+            }
+        }
+
+        stage('Charger images') {
+            steps {
+                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\load_images.py'
+            }
+        }
+
+        stage('Extraire features') {
+            steps {
+                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\extract_features.py'
+            }
+        }
+
+        stage('Créer index FAISS') {
+            steps {
+                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\build_index.py'
+            }
+        }
+
+        stage('Sauvegarder dans backend') {
+            steps {
+                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\save_outputs.py'
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo 'Le pipeline a échoué.'
+            script {
+                emailext (
+                    subject: "❌ ECHEC Pipeline: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """Le pipeline a échoué à l'étape : ${env.STAGE_NAME}
+Consultez les logs Jenkins pour plus de détails.
+Lien du build : ${env.BUILD_URL}""",
+                    to: 'hsan.mzid@gmail.com'
+                )
+            }
+        }
+        success {
+            script {
+                dir('C:/Users/hsanm/Desktop/kastelo/kastlo') {
+                    bat 'git add .'
+                    bat 'git commit -m "CI: auto commit after pipeline" || exit 0'
+                    bat 'git push'
+                }
+                build job: 'kasttelo'
+                emailext (
+                    subject: "✅ SUCCES Pipeline: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """Le pipeline s'est terminé avec succès.
+Lien du build : ${env.BUILD_URL}""",
+                    to: 'hsan.mzid@gmail.com'
+                )
+            }
+            echo 'Pipeline exécuté avec succès, commit/push effectué et job kasttelo lancé.'
+        }
+    }
+}
