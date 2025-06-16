@@ -46,27 +46,6 @@ pipeline {
     post {
         failure {
             echo 'Le pipeline a échoué.'
-            withCredentials([string(credentialsId: 'SENDGRID_API_KEY', variable: 'SG_API_KEY')]) {
-                /* groovylint-disable-next-line GStringExpressionWithinString */
-                sh '''
-                    echo {
-                    "personalizations": [{
-                        "to": [{"email": "hsan.mzid@gmail.com"}],
-                        "subject": "ECHEC Pipeline: '${JOB_NAME}' #${BUILD_NUMBER}"
-                    }],
-                    "from": {"email": "no-reply@kastelo.com"},
-                    "content": [{
-                        "type": "text/plain",
-                        "value": "Le pipeline a échoué à l’étape : '${STAGE_NAME}'\nLien du build : ${BUILD_URL}"
-                    }]
-                    } > mail.json
-
-                    curl --request POST ^
-                    --url https://api.sendgrid.com/v3/mail ^
-                    --header "Authorization: Bearer %SG_API_KEY%" ^
-                    --header "Content-Type: application/json" ^
-                    --data-binary "@mail.json"
-                    '''
             }
         }
 
@@ -81,29 +60,7 @@ pipeline {
                 }
                 build job: 'kasttelo'
             }
-
-            /* groovylint-disable-next-line DuplicateMapLiteral */
-            withCredentials([string(credentialsId: 'SENDGRID_API_KEY', variable: 'SG_API_KEY')]) {
-                sh '''
-                curl --request POST \
-                  --url https://api.sendgrid.com/v3/mail/send \
-                  --header "Authorization: Bearer $SG_API_KEY" \
-                  --header 'Content-Type: application/json' \
-                  --data '{
-                    "personalizations": [{
-                      "to": [{"email": "hsan.mzid@gmail.com"}],
-                      "subject": "SUCCES Pipeline: '${JOB_NAME}' #${BUILD_NUMBER}"
-                    }],
-                    "from": {"email": "no-reply@kastelo.com"},
-                    "content": [{
-                      "type": "text/plain",
-                      "value": "Le pipeline s\\'est terminé avec succès.\\nLien du build : ${BUILD_URL}"
-                    }]
-                  }'
-                '''
-            }
-
             echo 'Pipeline exécuté avec succès, commit/push effectué et job kasttelo lancé.'
         }
     }
-}
+
