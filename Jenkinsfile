@@ -47,7 +47,7 @@ pipeline {
             echo 'Le pipeline a échoué.'
             script {
                 emailext (
-                    subject: "❌ ECHEC Pipeline: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    subject: "ECHEC Pipeline: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """Le pipeline a échoué à l'étape : ${env.STAGE_NAME}
 Consultez les logs Jenkins pour plus de détails.
 Lien du build : ${env.BUILD_URL}""",
@@ -66,7 +66,7 @@ Lien du build : ${env.BUILD_URL}""",
                 }
                 build job: 'kasttelo'
                 emailext (
-                    subject: "✅ SUCCES Pipeline: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    subject: "SUCCES Pipeline: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """Le pipeline s'est terminé avec succès.
 Lien du build : ${env.BUILD_URL}""",
                     to: 'hsan.mzid@gmail.com'
