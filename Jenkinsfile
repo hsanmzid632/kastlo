@@ -35,6 +35,7 @@ pipeline {
                 bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\save_outputs.py'
             }
         }
+
         stage('Git Safe Directory') {
             steps {
                 bat 'git config --global --add safe.directory C:/Users/hsanm/Desktop/kastelo/kastlo'
@@ -45,16 +46,27 @@ pipeline {
     post {
         failure {
             echo 'Le pipeline a échoué.'
-            script {
-                emailext (
-                    subject: "ECHEC Pipeline: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: """Le pipeline a échoué à l'étape : ${env.STAGE_NAME}
-Consultez les logs Jenkins pour plus de détails.
-Lien du build : ${env.BUILD_URL}""",
-                    to: 'hsan.mzid@gmail.com'
-                )
+            withCredentials([string(credentialsId: 'SENDGRID_API_KEY', variable: 'SG_API_KEY')]) {
+                sh '''
+                curl --request POST \
+                  --url https://api.sendgrid.com/v3/mail/send \
+                  --header "Authorization: Bearer $SG_API_KEY" \
+                  --header 'Content-Type: application/json' \
+                  --data '{
+                    "personalizations": [{
+                      "to": [{"email": "hsan.mzid@gmail.com"}],
+                      "subject": "ECHEC Pipeline: '${JOB_NAME}' #${BUILD_NUMBER}"
+                    }],
+                    "from": {"email": "no-reply@kastelo.com"},
+                    "content": [{
+                      "type": "text/plain",
+                      "value": "Le pipeline a échoué à l’étape : '${STAGE_NAME}'\\nLien du build : ${BUILD_URL}"
+                    }]
+                  }'
+                '''
             }
         }
+
         success {
             script {
                 dir('C:/Users/hsanm/Desktop/kastelo/kastlo') {
@@ -65,13 +77,28 @@ Lien du build : ${env.BUILD_URL}""",
                     bat 'git push'
                 }
                 build job: 'kasttelo'
-                emailext (
-                    subject: "SUCCES Pipeline: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: """Le pipeline s'est terminé avec succès.
-Lien du build : ${env.BUILD_URL}""",
-                    to: 'hsan.mzid@gmail.com'
-                )
             }
+
+            withCredentials([string(credentialsId: 'SENDGRID_API_KEY', variable: 'SG_API_KEY')]) {
+                sh '''
+                curl --request POST \
+                  --url https://api.sendgrid.com/v3/mail/send \
+                  --header "Authorization: Bearer $SG_API_KEY" \
+                  --header 'Content-Type: application/json' \
+                  --data '{
+                    "personalizations": [{
+                      "to": [{"email": "hsan.mzid@gmail.com"}],
+                      "subject": "SUCCES Pipeline: '${JOB_NAME}' #${BUILD_NUMBER}"
+                    }],
+                    "from": {"email": "no-reply@kastelo.com"},
+                    "content": [{
+                      "type": "text/plain",
+                      "value": "Le pipeline s\\'est terminé avec succès.\\nLien du build : ${BUILD_URL}"
+                    }]
+                  }'
+                '''
+            }
+
             echo 'Pipeline exécuté avec succès, commit/push effectué et job kasttelo lancé.'
         }
     }
