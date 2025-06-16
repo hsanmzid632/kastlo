@@ -35,6 +35,11 @@ pipeline {
                 bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\save_outputs.py'
             }
         }
+        stage('Git Safe Directory') {
+            steps {
+                bat 'git config --global --add safe.directory C:/Users/hsanm/Desktop/kastelo/kastlo'
+            }
+        }
     }
 
     post {
