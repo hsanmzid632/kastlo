@@ -49,22 +49,24 @@ pipeline {
             withCredentials([string(credentialsId: 'SENDGRID_API_KEY', variable: 'SG_API_KEY')]) {
                 /* groovylint-disable-next-line GStringExpressionWithinString */
                 bat '''
-                curl --request POST \
-                  --url https://api.sendgrid.com/v3/mail/send \
-                  --header "Authorization: Bearer $SG_API_KEY" \
-                  --header 'Content-Type: application/json' \
-                  --data '{
+                    echo {
                     "personalizations": [{
-                      "to": [{"email": "hsan.mzid@gmail.com"}],
-                      "subject": "ECHEC Pipeline: '${JOB_NAME}' #${BUILD_NUMBER}"
+                        "to": [{"email": "hsan.mzid@gmail.com"}],
+                        "subject": "ECHEC Pipeline: '${JOB_NAME}' #${BUILD_NUMBER}"
                     }],
                     "from": {"email": "no-reply@kastelo.com"},
                     "content": [{
-                      "type": "text/plain",
-                      "value": "Le pipeline a échoué à l’étape : '${STAGE_NAME}'\\nLien du build : ${BUILD_URL}"
+                        "type": "text/plain",
+                        "value": "Le pipeline a échoué à l’étape : '${STAGE_NAME}'\nLien du build : ${BUILD_URL}"
                     }]
-                  }'
-                '''
+                    } > mail.json
+
+                    curl --request POST ^
+                    --url https://api.sendgrid.com/v3/mail ^
+                    --header "Authorization: Bearer %SG_API_KEY%" ^
+                    --header "Content-Type: application/json" ^
+                    --data-binary "@mail.json"
+                    '''
             }
         }
 
