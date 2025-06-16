@@ -46,7 +46,6 @@ pipeline {
     post {
         failure {
             echo 'Le pipeline a échoué.'
-            }
         }
 
         success {
@@ -63,4 +62,4 @@ pipeline {
             echo 'Pipeline exécuté avec succès, commit/push effectué et job kasttelo lancé.'
         }
     }
-
+}
