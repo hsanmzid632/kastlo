@@ -58,6 +58,8 @@ Lien du build : ${env.BUILD_URL}""",
         success {
             script {
                 dir('C:/Users/hsanm/Desktop/kastelo/kastlo') {
+                    bat 'git config user.name "hsanmzid632"'
+                    bat 'git config user.email "hsan.mzid@gmail.com"'
                     bat 'git add .'
                     bat 'git commit -m "CI: auto commit after pipeline" || exit 0'
                     bat 'git push'
