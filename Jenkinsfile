@@ -48,7 +48,7 @@ pipeline {
             echo 'Le pipeline a échoué.'
             withCredentials([string(credentialsId: 'SENDGRID_API_KEY', variable: 'SG_API_KEY')]) {
                 /* groovylint-disable-next-line GStringExpressionWithinString */
-                bat '''
+                sh '''
                     echo {
                     "personalizations": [{
                         "to": [{"email": "hsan.mzid@gmail.com"}],
@@ -84,7 +84,7 @@ pipeline {
 
             /* groovylint-disable-next-line DuplicateMapLiteral */
             withCredentials([string(credentialsId: 'SENDGRID_API_KEY', variable: 'SG_API_KEY')]) {
-                bat '''
+                sh '''
                 curl --request POST \
                   --url https://api.sendgrid.com/v3/mail/send \
                   --header "Authorization: Bearer $SG_API_KEY" \
