@@ -5,49 +5,50 @@ pipeline {
         cron('0 2 * * 1')
     }
 
-    stages {
-        stage('Install requirements') {
-            steps {
-                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pip install -r requirements.txt'
-            }
-        }
+    // stages {
+    //     stage('Install requirements') {
+    //         steps {
+    //             bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m pip install -r requirements.txt'
+    //         }
+    //     }
 
-        stage('Charger images') {
-            steps {
-                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\load_images.py'
-            }
-        }
+    //     stage('Charger images') {
+    //         steps {
+    //             bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\load_images.py'
+    //         }
+    //     }
 
-        stage('Extraire features') {
-            steps {
-                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\extract_features.py'
-            }
-        }
+    //     stage('Extraire features') {
+    //         steps {
+    //             bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\extract_features.py'
+    //         }
+    //     }
 
-        stage('Créer index FAISS') {
-            steps {
-                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\build_index.py'
-            }
-        }
+    //     stage('Créer index FAISS') {
+    //         steps {
+    //             bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\build_index.py'
+    //         }
+    //     }
 
-        stage('Sauvegarder dans backend') {
-            steps {
-                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\save_outputs.py'
-            }
-        }
+    //     stage('Sauvegarder dans backend') {
+    //         steps {
+    //             bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\save_outputs.py'
+    //         }
+    //     }
 
-        stage('Git Safe Directory') {
-            steps {
-                bat 'git config --global --add safe.directory C:/Users/hsanm/Desktop/kastelo/kastlo'
-            }
-        }
-    }
+    //     stage('Git Safe Directory') {
+    //         steps {
+    //             bat 'git config --global --add safe.directory C:/Users/hsanm/Desktop/kastelo/kastlo'
+    //         }
+    //     }
+    // }
 
     post {
         failure {
             echo 'Le pipeline a échoué.'
             withCredentials([string(credentialsId: 'SENDGRID_API_KEY', variable: 'SG_API_KEY')]) {
-                sh '''
+                /* groovylint-disable-next-line GStringExpressionWithinString */
+                bat '''
                 curl --request POST \
                   --url https://api.sendgrid.com/v3/mail/send \
                   --header "Authorization: Bearer $SG_API_KEY" \
@@ -79,8 +80,9 @@ pipeline {
                 build job: 'kasttelo'
             }
 
+            /* groovylint-disable-next-line DuplicateMapLiteral */
             withCredentials([string(credentialsId: 'SENDGRID_API_KEY', variable: 'SG_API_KEY')]) {
-                sh '''
+                bat '''
                 curl --request POST \
                   --url https://api.sendgrid.com/v3/mail/send \
                   --header "Authorization: Bearer $SG_API_KEY" \
