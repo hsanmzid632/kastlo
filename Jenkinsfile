@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     triggers {
-        // Exécution à 18h11 le jeudi de chaque semaine   
-        cron('11 18 * * 4')
+        // Exécution à 18h00 le mercredi de chaque semaine
+        cron('0 18 * * 3')
     }
 
     stages {
