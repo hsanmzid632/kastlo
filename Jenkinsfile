@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     triggers {
-        cron('0 2 * * 1')
+        // Exécution à 18h11 le jeudi   
+        cron('11 18 * * 4')
     }
 
     stages {
@@ -12,29 +13,29 @@ pipeline {
             }
         }
 
-        // stage('Charger images') {
-        //     steps {
-        //         bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\load_images.py'
-        //     }
-        // }
+        stage('Charger images') {
+            steps {
+                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\load_images.py'
+            }
+        }
 
-        // stage('Extraire features') {
-        //     steps {
-        //         bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\extract_features.py'
-        //     }
-        // }
+        stage('Extraire features') {
+            steps {
+                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\extract_features.py'
+            }
+        }
 
-        // stage('Créer index FAISS') {
-        //     steps {
-        //         bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\build_index.py'
-        //     }
-        // }
+        stage('Créer index FAISS') {
+            steps {
+                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\build_index.py'
+            }
+        }
 
-        // stage('Sauvegarder dans backend') {
-        //     steps {
-        //         bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\save_outputs.py'
-        //     }
-        // }
+        stage('Sauvegarder dans backend') {
+            steps {
+                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\save_outputs.py'
+            }
+        }
 
         stage('Git Safe Directory') {
             steps {
