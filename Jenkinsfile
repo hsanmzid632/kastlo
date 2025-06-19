@@ -19,17 +19,17 @@ pipeline {
             }
         }
 
-        stage('Extraire features') {
-            steps {
-                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\extract_features.py'
-            }
-        }
+        // stage('Extraire features') {
+        //     steps {
+        //         bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\extract_features.py'
+        //     }
+        // }
 
-        stage('Créer index FAISS') {
-            steps {
-                bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\build_index.py'
-            }
-        }
+        // stage('Créer index FAISS') {
+        //     steps {
+        //         bat 'C:\\Users\\hsanm\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts\\build_index.py'
+        //     }
+        // }
 
         stage('Sauvegarder dans backend') {
             steps {
